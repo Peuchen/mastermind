@@ -14,7 +14,7 @@ def play
     player = Player.new
     #2 instead of 12 for test purposes
     2.times do |turn|
-      puts "---\nTurn #{turn+1}\n---"
+      puts "------\nTurn #{turn+1}\n------"
       check_guess(player.guess)
       break if $win === true
     end
@@ -28,8 +28,6 @@ def play
       $win = true
     #If false: Give feedback on the guess
     else
-      puts "No such luck."
-      puts num
       feedback(num, @code)
     end
   end
@@ -40,11 +38,9 @@ def play
     code.split('').each_with_index do |n, idx|
       if n === guess[idx]
         guess[idx] = "-"
-        puts guess
         exact_match += 1
       elsif guess.include?(n)
         guess = guess.sub(n, "-")
-        puts guess
         correct_num += 1
       end
     end
@@ -54,7 +50,6 @@ end
 
 #Create a Player class
 class Player
-  attr_reader :input
 #Create a method for the player to enter a guess
   def guess
     puts "Please enter your guess, consisting of 4 numbers between 0 and 5."
