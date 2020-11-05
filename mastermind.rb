@@ -55,8 +55,13 @@ class Player
   attr_reader :guess
 #Create a method for the player to enter a guess
   def guess
-    puts "Please enter your guess, consisting of 4 numbers from 0 to 5."
-    gets.chomp
+    puts "Please enter your guess, consisting of 4 numbers between 0 and 5."
+    input = gets.chomp
+    until /([0-5][0-5][0-5][0-5])/.match?(input)
+      puts "Your input does not consist of 4 numbers between 0 and 5. Please try again."
+      input = gets.chomp
+    end
+    input
   end
 end
 
