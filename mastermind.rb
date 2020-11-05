@@ -1,6 +1,7 @@
 #Create a Game class
 class Game
 #Initialize a new game by setting up a board containing a random code
+  $win = false
 
   def initialize
     @code = ""
@@ -12,10 +13,8 @@ def play
     puts "The computer has generated a secret code."
     player = Player.new
     12.times do
-      player.guess
-      if check_guess(@guessed_code)
-        break
-      end
+      check_guess(player.guess)
+      break if $win === true
     end
   end
 
@@ -24,24 +23,40 @@ def play
     #If true: Print the random code and congratulate the player
     if num === @code
       puts "The code indeed was #{num}. Congratulations!"
+      $win = true
     #If false: Give feedback on the guess
     else
       puts "No such luck."
+      puts num
       feedback(num, @code)
     end
   end
 
   def feedback(guess, code)
+    exact_match = 0
+    correct_num = 0
+    code.split('').each_with_index do |n, idx|
+      if n === guess[idx]
+        guess[idx] = "-"
+        puts guess
+        exact_match += 1
+      elsif guess.include?(n)
+        guess = guess.sub(n, "-")
+        puts guess
+        correct_num += 1
+      end
+    end
+    puts "There are #{exact_match} exact matches and #{correct_num} correct numbers."
   end
 end
 
 #Create a Player class
 class Player
-  attr_reader :guessed_code
+  attr_reader :guess
 #Create a method for the player to enter a guess
   def guess
     puts "Please enter your guess, consisting of 4 numbers from 0 to 5."
-    @guessed_code = gets.chomp
+    gets.chomp
   end
 end
 
