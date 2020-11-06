@@ -57,5 +57,17 @@ class Guesser
   end
 end
 
+class Creator
+  def create_code
+    puts "Please enter your secret code, consisting of 4 numbers between 0 and 5."
+    @input = gets.chomp
+    until @input.length === 4 && /([0-5][0-5][0-5][0-5])/.match?(@input)
+      puts "Your input does not consist of 4 numbers between 0 and 5. Please try again."
+      @input = gets.chomp
+    end
+    @input
+  end
+end
+
 game = Game.new
 game.play
