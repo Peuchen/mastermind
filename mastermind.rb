@@ -6,15 +6,18 @@ class Game
     4.times {@code += rand(6).to_s}
   end
 
-  def play
-    puts "The computer has generated a secret code."
-    player = Guesser.new
-    #2 instead of 12 for test purposes
-    12.times do |turn|
-      puts "------\nTurn #{turn+1}\n------"
-      check_guess(player.guess)
-      break if $win === true
-      puts "You've lost. The code was #{@code}." if turn === 11
+  def select_mode
+    puts "Do you want to play Mastermind as the (C) code creator or as the (G) guesser?"
+    @input = gets.chomp
+    until @input === "C" || @input === "G"
+      puts "You have not chose C or G. Please try again."
+      @input = gets.chomp
+    end
+    if @input === "C"
+      puts "Test"
+    elsif @input === "G"
+      guesser = Guesser.new
+      guesser.play
     end
   end
 
@@ -46,6 +49,16 @@ class Game
 end
 
 class Guesser
+  def play
+    puts "The computer has generated a secret code."
+    12.times do |turn|
+      puts "------\nTurn #{turn+1}\n------"
+      check_guess(guess)
+      break if $win === true
+      puts "You've lost. The code was #{@code}." if turn === 11
+    end
+  end
+
   def guess
     puts "Please enter your guess, consisting of 4 numbers between 0 and 5."
     @input = gets.chomp
@@ -70,4 +83,4 @@ class Creator
 end
 
 game = Game.new
-game.play
+game.select_mode
