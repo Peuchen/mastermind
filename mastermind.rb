@@ -48,7 +48,7 @@ class Game
   end
 end
 
-class Guesser
+class Guesser < Game
   def play
     puts "The computer has generated a secret code."
     12.times do |turn|
@@ -70,7 +70,7 @@ class Guesser
   end
 end
 
-class Creator
+class Creator < Game
   def create_code
     puts "Please enter your secret code, consisting of 4 numbers between 0 and 5."
     @input = gets.chomp
