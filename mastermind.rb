@@ -8,7 +8,7 @@ class Game
 
   def play
     puts "The computer has generated a secret code."
-    player = Guess.new
+    player = Guesser.new
     #2 instead of 12 for test purposes
     12.times do |turn|
       puts "------\nTurn #{turn+1}\n------"
