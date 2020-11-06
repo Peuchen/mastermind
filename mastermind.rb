@@ -8,7 +8,7 @@ class Game
 
   def play
     puts "The computer has generated a secret code."
-    player = Player.new
+    player = Guess.new
     #2 instead of 12 for test purposes
     12.times do |turn|
       puts "------\nTurn #{turn+1}\n------"
@@ -45,7 +45,7 @@ class Game
   end
 end
 
-class Player
+class Guesser
   def guess
     puts "Please enter your guess, consisting of 4 numbers between 0 and 5."
     @input = gets.chomp
