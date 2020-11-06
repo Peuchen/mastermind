@@ -7,15 +7,16 @@ class Game
   end
 
   def select_mode
-    puts "Do you want to play Mastermind as the (C) code creator or as the (G) guesser?"
+    puts "Do you want to play Mastermind as the (c) code creator or as the (g) guesser?"
     @input = gets.chomp
-    until @input === "C" || @input === "G"
-      puts "You have not chose C or G. Please try again."
+    until @input === "c" || @input === "g"
+      puts "You have not chosn 'c' or 'g'. Please try again."
       @input = gets.chomp
     end
-    if @input === "C"
-      puts "Test"
-    elsif @input === "G"
+    if @input === "c"
+      creator = Creator.new
+      creator.create_code
+    elsif @input === "g"
       guesser = Guesser.new
       guesser.play
     end
@@ -36,11 +37,9 @@ class Game
     code.split('').each_with_index do |n, idx|
       if n === guess[idx]
         guess[idx] = "-"
-        puts guess
         exact_match += 1
       elsif guess.include?(n)
         guess = guess.sub(n, "-")
-        puts guess
         correct_num += 1
       end
     end
@@ -73,12 +72,29 @@ end
 class Creator < Game
   def create_code
     puts "Please enter your secret code, consisting of 4 numbers between 0 and 5."
-    @input = gets.chomp
-    until @input.length === 4 && /([0-5][0-5][0-5][0-5])/.match?(@input)
+    @code = gets.chomp
+    until @code.length === 4 && /([0-5][0-5][0-5][0-5])/.match?(@code)
       puts "Your input does not consist of 4 numbers between 0 and 5. Please try again."
-      @input = gets.chomp
+      @code = gets.chomp
     end
-    @input
+    self.play
+  end
+
+  def play
+    puts "The player has generated a secret code."
+    12.times do |turn|
+      puts "------\nTurn #{turn+1}\n------"
+      check_guess(computer_guess)
+      break if $win === true
+      puts "You've lost. The code was #{@code}." if turn === 11
+    end
+  end
+
+  def computer_guess
+    computer_guess = ""
+    4.times {computer_guess += rand(6).to_s}
+    puts computer_guess
+    computer_guess
   end
 end
 
