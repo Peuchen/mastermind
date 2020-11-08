@@ -1,7 +1,8 @@
 class Game
-  attr_accessor :exact_match, :correct_num
 
   $win = false
+  $exact_match = 0
+  $correct_num = 0
 
   def initialize
     @code = ""
@@ -34,18 +35,18 @@ class Game
   end
 
   def feedback(guess, code)
-    @exact_match = 0
-    @correct_num = 0
+    $exact_match = 0
+    $correct_num = 0
     code.split('').each_with_index do |n, idx|
       if n === guess[idx]
         guess[idx] = "-"
-        @exact_match += 1
+        $exact_match += 1
       elsif guess.include?(n)
         guess = guess.sub(n, "-")
-        @correct_num += 1
+        $correct_num += 1
       end
     end
-    puts "There are #{@exact_match} exact matches and #{@correct_num} correct numbers."
+    puts "There are #{$exact_match} exact matches and #{$correct_num} correct numbers."
   end
 end
 
@@ -72,6 +73,8 @@ class Guesser < Game
 end
 
 class Creator < Game
+  $computer_guess = "0000"
+
   def create_code
     puts "Please enter your secret code, consisting of 4 numbers between 0 and 5."
     @code = gets.chomp
@@ -86,17 +89,23 @@ class Creator < Game
     puts "The player has generated a secret code."
     12.times do |turn|
       puts "------\nTurn #{turn+1}\n------"
-      check_guess(change_computer_guess)
+      puts $computer_guess
+      check_guess($computer_guess)
+      change_computer_guess($exact_match)
       break if $win === true
       puts "You've lost. The code was #{@code}." if turn === 11
     end
   end
 
-  def change_computer_guess
-    computer_guess = ""
-    4.times {computer_guess += rand(6).to_s}
-    puts computer_guess
-    computer_guess
+  def change_computer_guess(matches)
+    memory = ""
+    if matches > 0
+      memory << $computer_guess[0]
+    end
+    if memory.length < 4
+      $computer_guess = ($computer_guess.to_i + 1111).to_s
+    end
+    puts "Memory is #{memory}"
   end
 end
 
