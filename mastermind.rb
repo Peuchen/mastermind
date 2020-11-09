@@ -37,15 +37,17 @@ class Game
   def feedback(guess, code)
     $exact_match = 0
     $correct_num = 0
+    @temp_guess = guess.dup
     code.split('').each_with_index do |n, idx|
-      if n === guess[idx]
-        guess[idx] = "-"
+      if n === @temp_guess[idx]
+        @temp_guess[idx] = "-"
         $exact_match += 1
       elsif guess.include?(n)
-        guess = guess.sub(n, "-")
+        @temp_guess = @temp_guess.sub(n, "-")
         $correct_num += 1
       end
     end
+
     puts "There are #{$exact_match} exact matches and #{$correct_num} correct numbers."
   end
 end
@@ -74,6 +76,7 @@ end
 
 class Creator < Game
   $computer_guess = "0000"
+  $memory = ""
 
   def create_code
     puts "Please enter your secret code, consisting of 4 numbers between 0 and 5."
@@ -97,15 +100,14 @@ class Creator < Game
     end
   end
 
-  def change_computer_guess(matches)
-    memory = ""
-    if matches > 0
-      memory << $computer_guess[0]
+  def change_computer_guess(exact_matches)
+    if exact_matches > 0
+      $memory << $computer_guess[0]
     end
-    if memory.length < 4
+    if $memory.length < 4
       $computer_guess = ($computer_guess.to_i + 1111).to_s
     end
-    puts "Memory is #{memory}"
+    puts "Memory is #{$memory}"
   end
 end
 
