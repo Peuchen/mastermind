@@ -101,11 +101,13 @@ class Creator < Game
   end
 
   def change_computer_guess(exact_matches)
-    if exact_matches > 0
-      $memory << $computer_guess[0]
+    if exact_matches > 0  && $memory.length < 4
+      $memory << $computer_guess[0...exact_matches]
     end
     if $memory.length < 4
       $computer_guess = ($computer_guess.to_i + 1111).to_s
+    else
+      $computer_guess = $memory.chars.shuffle.join
     end
     puts "Memory is #{$memory}"
   end
