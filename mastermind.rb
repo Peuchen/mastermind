@@ -75,9 +75,6 @@ class Guesser < Game
 end
 
 class Creator < Game
-  $computer_guess = "0000"
-  $memory = ""
-
   def create_code
     puts "Please enter your secret code, consisting of 4 numbers between 0 and 5."
     @code = gets.chomp
@@ -89,12 +86,14 @@ class Creator < Game
   end
 
   def play
+    @computer_guess = "0000"
     @previous_guesses = []
+    @memory = ""
     puts "The player has generated a secret code."
     12.times do |turn|
       puts "------\nTurn #{turn+1}\n------"
-      puts $computer_guess
-      check_guess($computer_guess)
+      puts @computer_guess
+      check_guess(@computer_guess)
       change_computer_guess($exact_match)
       break if $win === true
       puts "You've lost. The code was #{@code}." if turn === 11
@@ -102,20 +101,20 @@ class Creator < Game
   end
 
   def change_computer_guess(exact_matches)
-    if exact_matches > 0  && $memory.length < 4
-      $memory << $computer_guess[0...exact_matches]
+    if exact_matches > 0  && @memory.length < 4
+      @memory << @computer_guess[0...exact_matches]
     end
-    if $memory.length < 4
-      $computer_guess = ($computer_guess.to_i + 1111).to_s
+    if @memory.length < 4
+      @computer_guess = (@computer_guess.to_i + 1111).to_s
     else
-      $computer_guess = $memory.chars.shuffle.join
-      while @previous_guesses.include?($computer_guess)
-        $computer_guess = $memory.chars.shuffle.join
+      @computer_guess = @memory.chars.shuffle.join
+      while @previous_guesses.include?(@computer_guess)
+        @computer_guess = @memory.chars.shuffle.join
       end
-        @previous_guesses << $computer_guess
+        @previous_guesses << @computer_guess
         puts @previous_guesses
     end
-    puts "Memory is #{$memory}"
+    puts "Memory is #{@memory}"
   end
 end
 
