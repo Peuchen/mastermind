@@ -89,6 +89,7 @@ class Creator < Game
   end
 
   def play
+    @previous_guesses = []
     puts "The player has generated a secret code."
     12.times do |turn|
       puts "------\nTurn #{turn+1}\n------"
@@ -108,6 +109,11 @@ class Creator < Game
       $computer_guess = ($computer_guess.to_i + 1111).to_s
     else
       $computer_guess = $memory.chars.shuffle.join
+      while @previous_guesses.include?($computer_guess)
+        $computer_guess = $memory.chars.shuffle.join
+      end
+        @previous_guesses << $computer_guess
+        puts @previous_guesses
     end
     puts "Memory is #{$memory}"
   end
