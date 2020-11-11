@@ -29,6 +29,7 @@ class Game
     $correct_num = 0
     @temp_guess = guess.dup
     @temp_code = code.dup
+
     @temp_guess.split('').each_with_index do |n, idx|
       if n === @temp_code[idx]
         @temp_guess[idx] = "x"
@@ -36,7 +37,7 @@ class Game
         $exact_match += 1
       end
     end
-    @temp_guess.split('').map do |n|
+    @temp_guess.split('').each do |n|
       if @temp_code.include?(n)
           @temp_guess = @temp_guess.sub(n, "x")
           @temp_code = @temp_code.sub(n, "-")
@@ -89,6 +90,7 @@ class Creator < Game
     @computer_guess = "0000"
     @previous_guesses = []
     @memory = ""
+
     puts "The player has generated a secret code."
     12.times do |turn|
       puts "------\nTurn #{turn+1}\n------"
