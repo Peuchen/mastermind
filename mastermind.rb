@@ -28,15 +28,19 @@ class Game
     $exact_match = 0
     $correct_num = 0
     @temp_guess = guess.dup
-    code.split('').each_with_index do |n, idx|
-      if @temp_guess.include?(n)
-        if n === @temp_guess[idx]
-          @temp_guess[idx] = "-"
-          $exact_match += 1
-        else
-          @temp_guess = @temp_guess.sub(n, "-")
+    @temp_code = code.dup
+    @temp_guess.split('').each_with_index do |n, idx|
+      if n === @temp_code[idx]
+        @temp_guess[idx] = "x"
+        @temp_code[idx] = "-"
+        $exact_match += 1
+      end
+    end
+    @temp_guess.split('').map do |n|
+      if @temp_code.include?(n)
+          @temp_guess = @temp_guess.sub(n, "x")
+          @temp_code = @temp_code.sub(n, "-")
           $correct_num += 1
-        end
       end
     end
 
