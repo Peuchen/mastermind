@@ -39,12 +39,14 @@ class Game
     $correct_num = 0
     @temp_guess = guess.dup
     code.split('').each_with_index do |n, idx|
-      if n === @temp_guess[idx]
-        @temp_guess[idx] = "-"
-        $exact_match += 1
-      elsif guess.include?(n)
-        @temp_guess = @temp_guess.sub(n, "-")
-        $correct_num += 1
+      if @temp_guess.include?(n)
+        if n === @temp_guess[idx]
+          @temp_guess[idx] = "-"
+          $exact_match += 1
+        else
+          @temp_guess = @temp_guess.sub(n, "-")
+          $correct_num += 1
+        end
       end
     end
 
@@ -92,11 +94,11 @@ class Creator < Game
     puts "The player has generated a secret code."
     12.times do |turn|
       puts "------\nTurn #{turn+1}\n------"
-      puts @computer_guess
+      puts "The computer guesses #{@computer_guess}."
       check_guess(@computer_guess)
-      change_computer_guess($exact_match)
       break if $win === true
-      puts "You've lost. The code was #{@code}." if turn === 11
+      change_computer_guess($exact_match)
+      puts "The computer has lost. The code was #{@code}." if turn === 11
     end
   end
 
@@ -112,9 +114,7 @@ class Creator < Game
         @computer_guess = @memory.chars.shuffle.join
       end
         @previous_guesses << @computer_guess
-        puts @previous_guesses
     end
-    puts "Memory is #{@memory}"
   end
 end
 
