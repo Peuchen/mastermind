@@ -33,11 +33,9 @@ class Game
         if n === @temp_guess[idx]
           @temp_guess[idx] = "-"
           $exact_match += 1
-          puts @temp_guess
         else
           @temp_guess = @temp_guess.sub(n, "-")
           $correct_num += 1
-          puts @temp_guess
         end
       end
     end
