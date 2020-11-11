@@ -1,36 +1,26 @@
 class Game
-
   $win = false
-  $exact_match = 0
-  $correct_num = 0
-
-  def initialize
-    @code = ""
-    4.times {@code += rand(6).to_s}
-  end
 
   def select_mode
     puts "Do you want to play Mastermind as the (c) code creator or as the (g) guesser?"
     @input = gets.chomp
     until @input === "c" || @input === "g"
-      puts "You have not chosn 'c' or 'g'. Please try again."
+      puts "You have not chosen 'c' or 'g'. Please try again."
       @input = gets.chomp
     end
     if @input === "c"
-      creator = Creator.new
-      creator.create_code
+      Creator.new.play
     elsif @input === "g"
-      guesser = Guesser.new
-      guesser.play
+      Guesser.new.play
     end
   end
 
-  def check_guess(num)
-    if num === @code
-      puts "The code was indeed #{num}. Congratulations!"
+  def check_guess(guess)
+    if guess === @code
+      puts "The code was indeed #{guess}. Congratulations!"
       $win = true
     else
-      feedback(num, @code)
+      feedback(guess, @code)
     end
   end
 
@@ -43,9 +33,11 @@ class Game
         if n === @temp_guess[idx]
           @temp_guess[idx] = "-"
           $exact_match += 1
+          puts @temp_guess
         else
           @temp_guess = @temp_guess.sub(n, "-")
           $correct_num += 1
+          puts @temp_guess
         end
       end
     end
@@ -55,8 +47,13 @@ class Game
 end
 
 class Guesser < Game
-  def play
+  def initialize
+    @code = ""
+    4.times {@code += rand(6).to_s}
     puts "The computer has generated a secret code."
+  end
+
+  def play
     12.times do |turn|
       puts "------\nTurn #{turn+1}\n------"
       check_guess(guess)
@@ -77,14 +74,13 @@ class Guesser < Game
 end
 
 class Creator < Game
-  def create_code
+  def initialize
     puts "Please enter your secret code, consisting of 4 numbers between 0 and 5."
     @code = gets.chomp
     until @code.length === 4 && /([0-5][0-5][0-5][0-5])/.match?(@code)
       puts "Your input does not consist of 4 numbers between 0 and 5. Please try again."
       @code = gets.chomp
     end
-    self.play
   end
 
   def play
